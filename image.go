@@ -93,3 +93,19 @@ func Imhist(gray image.Gray) (hist []int) {
 	}
 	return
 }
+
+// Convert image to binary image, based on threshold
+func Im2bw(img image.Gray, level uint8) (bw *image.Gray) {
+	bw = image.NewGray(img.Bounds())
+	if level == 0 || level == 255 {
+		level = 255 / 2
+	}
+	for i := 0; i < len(img.Pix); i++ {
+		if img.Pix[i] > level {
+			bw.Pix[i] = 255
+		} else {
+			bw.Pix[i] = 0
+		}
+	}
+	return
+}
