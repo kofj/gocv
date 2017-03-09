@@ -75,3 +75,23 @@ func Im2gray(img *image.Image) (gray *image.Gray) {
 	draw.Draw(gray, r, *img, (*img).Bounds().Min, draw.Src)
 	return
 }
+
+// Histogram of image data
+func Imhist(gray *image.Gray) (hist []int) {
+	var (
+		idx    int
+		r      = gray.Bounds()
+		width  = r.Dx()
+		height = r.Dy()
+	)
+	hist = make([]int, 256)
+	for i := 0; i < width; i++ {
+		for j := 0; j < height; j++ {
+			idx = i*height + j
+			v := gray.Pix[idx]
+			// fmt.Printf("[%d,%d] %d\n", i, j, v)
+			hist[v]++
+		}
+	}
+	return
+}
