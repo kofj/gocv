@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"image/draw"
 	"image/gif"
 	_ "image/gif"
 	"image/jpeg"
@@ -64,5 +65,13 @@ func Imwrite(img *image.Image, name, format string) (err error) {
 	fmt.Println(w.Write(buf.Bytes()))
 	fmt.Println(len(buf.Bytes()))
 
+	return
+}
+
+// Convert to gray image
+func Im2gray(img *image.Image) (gray *image.Gray) {
+	r := (*img).Bounds()
+	gray = image.NewGray(r)
+	draw.Draw(gray, r, *img, (*img).Bounds().Min, draw.Src)
 	return
 }
