@@ -24,6 +24,8 @@ import (
 	_ "golang.org/x/image/webp"
 )
 
+type Histogram [256]int
+
 // Read image from graphics file
 func Imread(name string) (img image.Image, format string, err error) {
 	var f *os.File
@@ -76,14 +78,14 @@ func Im2gray(img image.Image) (gray *image.Gray) {
 }
 
 // Histogram of image data
-func Imhist(gray image.Gray) (hist []int) {
+func Imhist(gray image.Gray) (hist *Histogram) {
 	var (
 		idx    int
 		r      = gray.Bounds()
 		width  = r.Dx()
 		height = r.Dy()
 	)
-	hist = make([]int, 256)
+	hist = new(Histogram)
 	for i := 0; i < width; i++ {
 		for j := 0; j < height; j++ {
 			idx = i*height + j
