@@ -111,3 +111,37 @@ func Im2bw(img image.Gray, level uint8) (bw *image.Gray) {
 	}
 	return
 }
+
+// Global histogram threshold using Otsu's method
+func Otsuthresh(hist *Histogram, size int) (threshold uint8) {
+	// normalize histogram
+	// 直方图归一化
+	var nHist [256]float64
+	for i := 0; i < 256; i++ {
+		nHist[i] = float64(hist[i]) / float64(size)
+	}
+
+	// average pixel value
+	// 整幅图像的平均灰度
+	var avgVal float64
+	for i := 0; i < 256; i++ {
+		avgVal += float64(i) * nHist[i]
+	}
+
+	var maxVariance float64
+	var w, u float64
+	for i := 0; i < 256; i++ {
+		// 假设当前灰度i为阈值, 0~i 灰度的像素(假设像素值在此范围的像素叫做前景像素) 所占整幅图像的比例
+		w += nHist[i]
+		// 灰度i 之前的像素(0~i)的平均灰度值： 前景像素的平均灰度值
+		u += float64(i) * nHist[i]
+
+		t := avgVal*w - u
+		variance := t * t / (w * (1 - w))
+		if variance > maxVariance {
+			maxVariance = variance
+			threshold = uint8(i)
+		}
+	}
+	return
+}
