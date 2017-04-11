@@ -63,8 +63,8 @@ func Imwrite(img image.Image, name, format string) (err error) {
 	}
 
 	w, _ := os.Create(fmt.Sprintf("%s.%s", name, format))
-	fmt.Println(w.Write(buf.Bytes()))
-	fmt.Println(len(buf.Bytes()))
+	w.Write(buf.Bytes())
+	// fmt.Println(len(buf.Bytes()))
 
 	return
 }
